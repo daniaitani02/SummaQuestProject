@@ -27,11 +27,11 @@ class QuestionGenerator:
         self.ANSWER_TOKEN = "<answer>"
         self.CONTEXT_TOKEN = "<context>"
         self.SEQ_LENGTH = 512
+        self.device = torch.device("cpu")
+        # self.device = torch.device(
+        #     "cuda" if torch.cuda.is_available() else "cpu")
 
-        self.device = torch.device(
-            "cuda" if torch.cuda.is_available() else "cpu")
-
-        self.qg_tokenizer = AutoTokenizer.from_pretrained(QG_PRETRAINED)
+        self.qg_tokenizer = AutoTokenizer.from_pretrained(QG_PRETRAINED,use_fast=False)
         self.qg_model = AutoModelForSeq2SeqLM.from_pretrained(QG_PRETRAINED)
         self.qg_model.to(self.device)
         self.qg_model.eval()
@@ -297,31 +297,7 @@ class QuestionGenerator:
             qa_list.append(qa)
 
         return qa_list
-    def interact_and_evaluate(self, qa_list: List[Mapping[str, Any]]) -> None:
-            """Interact with the user to get answers and check correctness, and then grade them."""
-            correct_count = 0
-            for i, qa in enumerate(qa_list, start=1):
-                print(f"Question {i}: {qa['question']}")
-                user_answer = input("Your answer: ").strip()
-
-                if isinstance(qa['answer'], list):  # Handling multiple choice answers
-                    correct_answers = [a['answer'] for a in qa['answer'] if a['correct']]
-                    if user_answer in correct_answers:
-                        print("Correct!\n")
-                        correct_count += 1
-                    else:
-                        print("Incorrect. The correct answers are:", ', '.join(correct_answers), "\n")
-                else:  # Handling direct answer
-                    if user_answer.lower() == qa['answer'].lower():
-                        print("Correct!\n")
-                        correct_count += 1
-                    else:
-                        print(f"Incorrect. The correct answer is: {qa['answer']}\n")
-
-            total_questions = len(qa_list)
-            print(f"Your score: {correct_count}/{total_questions} ({(correct_count/total_questions)*100:.2f}%)")
-
-
+    
 class QAEvaluator:
     """Wrapper for a transformer model which evaluates the quality of question-answer pairs.
     Given a QA pair, the model will generate a score. Scores can be used to rank and filter
@@ -434,13 +410,13 @@ def print_qa(qa_list: List[Mapping[str, str]], show_answers: bool = True) -> Non
 #     generator = QuestionGenerator()
 #     text = """
 #       The UK's National Cyber Security Centre said its officers had "reached out" to the tech firm. "We would urge people to treat requests for money or sensitive information on social media with extreme caution," it said in a statement.
-        # US politicians also have questions. Republican Senator Josh Hawley has written to the company asking if President Trump's account had been vulnerable.
+#         US politicians also have questions. Republican Senator Josh Hawley has written to the company asking if President Trump's account had been vulnerable.
 #       President Trump's account was not compromised, the White House said.
 #       The chair of the Senate Commerce committee has also been in contact with Twitter.
 #       "It cannot be overstated how troubling this incident is, both in its effects and in the apparent failure of Twitter's internal controls to prevent it," Senator Roger Wicker wrote to the firm.    
 #     """
+#     summary = generator.generate_summary(text)
 #     qa_pairs = generator.generate(text, num_questions=2)
-#     generator.interact_and_evaluate(qa_pairs)
 
 # if __name__ == "__main__":
 #     main()
