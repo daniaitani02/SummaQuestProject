@@ -1,7 +1,6 @@
-# To download en_core_web_sm run this command: python -m spacy download en_core_web_sm
-
 torch
 transformers
 numpy
 spacy
 flask
+sentencepiece
