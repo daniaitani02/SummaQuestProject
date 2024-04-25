@@ -4,5 +4,4 @@ torch
 transformers
 numpy
 spacy
-PyPDF2
 flask
