@@ -1,8 +1,9 @@
 from flask import Flask, request, render_template
 from Summary_Question_Generator import QuestionGenerator
 
-generator = QuestionGenerator()
 app = Flask(__name__)
+generator = QuestionGenerator()
+
 
 
 
@@ -32,4 +33,4 @@ def question():
     return render_template('question.html', **context)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)
