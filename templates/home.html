@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f4f9; }
+        .container { margin-top: 50px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .list-group-item { transition: transform 0.2s; }
+        .list-group-item:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Your Personal Text Assistant</h1>
+            <p>Select an option below to proceed.</p>
+        </div>
+        <div class="list-group">
+            <a href="/summary" class="list-group-item list-group-item-action">
+                <i class="bi bi-journal-text" style="font-size: 1.5rem;"></i> Generate Summary
+            </a>
+            <a href="/question" class="list-group-item list-group-item-action">
+                <i class="bi bi-question-circle" style="font-size: 1.5rem;"></i> Generate Questions
+            </a>
+        </div>
+    </div>
+</body>
+</html>

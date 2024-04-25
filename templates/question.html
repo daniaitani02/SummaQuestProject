@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Questions</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f4f9; }
+        .container { margin-top: 50px; }
+        .btn-secondary { margin-bottom: 20px; }
+        .modal-content { font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-secondary mb-3">Home</a>
+        <h1>Generate Questions</h1>
+        <form id="questionsForm" action="/question" method="post">
+            <div class="mb-3">
+                <label for="textInput" class="form-label">Enter your text:</label>
+                <textarea id="textInput" name="text" rows="10" class="form-control" required>{{ text }}</textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="numQuestions" class="form-label">Number of Questions (1-10):</label>
+                <input type="number" id="numQuestions" name="num_questions" class="form-control" value="{{ num_questions }}" min="1" max="20">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Questions</button>
+        </form>
+        {% if qa_pairs %}
+        <!-- Questions list to trigger modals -->
+        <div class="list-group mt-4">
+            {% for qa in qa_pairs %}
+            <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modal{{ loop.index }}">
+                Question {{ loop.index }}: Click to view
+            </a>
+            {% endfor %}
+        </div>
+        <!-- Modals for each question -->
+        {% for qa in qa_pairs %}
+        <div class="modal fade" id="modal{{ loop.index }}" tabindex="-1" aria-labelledby="modalLabel{{ loop.index }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel{{ loop.index }}">Question {{ loop.index }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>{{ qa.question }}</strong></p>
+                        {% if qa.answer is iterable and qa.answer[0] is mapping %}
+                        <form>
+                            {% for option in qa.answer %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="question{{ loop.index }}" id="option{{ loop.index }}-{{ loop.index0 }}"
+                                {{ 'checked' if option['correct'] else '' }}>
+                                <label class="form-check-label" for="option{{ loop.index }}-{{ loop.index0 }}">
+                                    {{ option['answer'] }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </form>
+                        {% else %}
+                        <p><strong>Answer:</strong> {{ qa.answer }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Summary</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f4f4f9; }
+        .container { margin-top: 50px; }
+        #loadingSpinner { display: none; }
+        .nav-link { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-secondary mb-3">Home</a>
+        <h1>Generate Summary</h1>
+        <form id="summaryForm" action="/summary" method="post">
+            <div class="mb-3">
+                <label for="textInput" class="form-label">Enter your text:</label>
+                <textarea id="textInput" name="text" rows="10" class="form-control" required>{{ text }}</textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Generate Summary</button>
+            <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </form>
+        <div class="mt-4" id="summaryResult">
+            <h2>Summary:</h2>
+            <p>{{ summary }}</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('summaryForm').addEventListener('submit', function(event) {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
