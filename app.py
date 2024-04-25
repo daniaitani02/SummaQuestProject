@@ -5,8 +5,6 @@ app = Flask(__name__)
 generator = QuestionGenerator()
 
 
-
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -33,4 +31,4 @@ def question():
     return render_template('question.html', **context)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)
